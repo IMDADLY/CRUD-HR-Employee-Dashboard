@@ -1,9 +1,3 @@
-'''
-Created on Jan 10, 2017
-
-@author: hanif
-'''
-
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
 
