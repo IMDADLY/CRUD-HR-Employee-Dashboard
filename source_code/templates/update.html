@@ -55,18 +55,18 @@
                   <label class="col-sm-1 control-label">Gender</label>
                   <div class="col-sm-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="gender" value="M">
-                        {% if genderValue == 'M' %}checked{% endif %}
+                      <input class="form-check-input" type="radio" name="gender" value="M"
+                       {% if row.2 == 'M' %}checked{% endif %}>
                       <label class="form-check-label">Male</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="gender" value="F">
-                        {% if genderValue == 'M' %}checked{% endif %}
+                      <input class="form-check-input" type="radio" name="gender" value="F"
+                       {% if row.2 == 'F' %}checked{% endif %}>
                       <label class="form-check-label">Female</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="gender" value="Other">
-                        {% if genderValue == 'M' %}checked{% endif %}
+                      <input class="form-check-input" type="radio" name="gender" value="Other"
+                      {% if row.2 == 'Other' %}checked{% endif %}>
                       <label class="form-check-label">Other</label>
                     </div>
                   </div>
@@ -85,7 +85,7 @@
                   <label class="col-sm-1 control-label">Address</label>
 
                   <div class="col-sm-4">
-                    <textarea name="address" value="{{ row[4] }}" class="form-control" placeholder="Address" rows ="3" autocomplete="off" required></textarea>
+                    <textarea name="address" class="form-control" placeholder="Address" rows ="3" autocomplete="off">{{row.4}}</textarea>
                   </div>
                 </div>
                 <br></br>
@@ -94,12 +94,12 @@
                 <div class="form-group row">
                   <label for="performance_score" class="col-sm-1 control-label">Performance Score</label>
                   <div class="col-sm-4">
-                    <input name="performance_score" type='range' value="{{ row[5] }}" class="form-range" min="0" max="10" setp = "0.5" id="performance_score" autocomplete="off" required>
+                    <input name="performance_score" type='range' value="{{ row[5] }}" class="form-range" min="0" max="10" step = "0.5" id="performance_score" autocomplete="off" required>
                   </div>
 
                   <label class="col-sm-1 control-label">Remarks</label>
                   <div class="col-sm-4">
-                    <textarea name="remarks" class="form-control" value="{{row[6]}}" placeholder="Remarks" rows="3" autocomplete="off"></textarea>
+                    <textarea name="remarks" class="form-control" placeholder="Remarks" rows="3" autocomplete="off">{{ row.6 }}</textarea>
                   </div>
                 </div>
 
