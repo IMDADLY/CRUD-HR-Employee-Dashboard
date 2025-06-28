@@ -75,8 +75,3 @@ class Database:
             return False
         finally:
             con.close()
-
-    def export(self):
-        con = Database.connect(self)
-        cursor=con.cursor()
-        cursor.execute('SELECT * from employee')

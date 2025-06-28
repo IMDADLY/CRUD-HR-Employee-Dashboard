@@ -1,5 +1,7 @@
-from flask import Flask, flash, render_template, redirect, url_for, request, session
+from flask import Flask, flash, render_template, redirect, url_for, request, session, Response
 from module.database import Database
+import csv
+import io
 
 
 app = Flask(__name__)
@@ -78,6 +80,29 @@ def deletephone():
         return redirect(url_for('index'))
     else:
         return redirect(url_for('index'))
+    
+@app.route('/export')
+def export_csv():
+    # Use your existing database class
+    data = db.read(None)
+
+    # Check if data is empty
+    if not data:
+        return "No data to export"
+
+    # Manually set the column names (if not returned by your class)
+    # Or modify your class to return column names too
+    column_names = ['ID', 'Name', 'Gender', 'Salary','Address','Performance Score','Remarks']  # Update based on your table structure
+
+    # Write CSV to in-memory string
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(column_names)
+    writer.writerows(data)
+
+    output.seek(0)
+    return Response(output, mimetype="text/csv",
+                    headers={"Content-Disposition": "attachment;filename=employees.csv"})
 
 @app.errorhandler(404)
 def page_not_found(error):
