@@ -104,6 +104,10 @@ def export_csv():
     return Response(output, mimetype="text/csv",
                     headers={"Content-Disposition": "attachment;filename=employees.csv"})
 
+@app.route('/charts')
+def show_charts():
+    return render_template('charts.html')
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html')
