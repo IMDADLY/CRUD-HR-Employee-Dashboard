@@ -1,13 +1,29 @@
 from flask import Flask, flash, render_template, redirect, url_for, request, session, Response
 from module.database import Database
+from werkzeug.datastructures import ImmutableMultiDict
 import csv
 import io
-
 
 app = Flask(__name__)
 app.secret_key = "mys3cr3tk3y"
 db = Database()
 
+def upload_csv_to_database(file_path):
+    try:
+        with open(file_path, 'r') as csv_file:
+            csv_reader=csv.reader(csv_file)
+            field_names = ['id', 'name', 'gender', 'salary', 'address', 'performance_score', 'remarks', 'save']
+            db.clear()
+            for row in csv_reader:
+                 if len(row) == len(field_names) - 1:
+                    row.append('Save')
+                    form_data = ImmutableMultiDict(zip(field_names, row))
+                    db.insert(form_data)
+        return True
+    except Exception as e:
+        print(f"Error uploading CSV to database: {e}")
+        return False
+    
 @app.route('/')
 def index():
     data = db.read(None)
@@ -81,6 +97,22 @@ def deletephone():
     else:
         return redirect(url_for('index'))
     
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    try:
+        if 'file' not in request.files:
+            return 'No file included in the request', 400
+        csv_file = request.files['file']
+        file_path = 'Downloads'
+        csv_file.save(file_path)
+        success=upload_csv_to_database(file_path)
+        if success:
+            return 'CSV data uploaded to database successfully', 200
+        else:
+            return 'Failed to upload CSV data to database', 500
+    except Exception as e:
+        return f"An error occured: {e}", 500
+
 @app.route('/export')
 def export_csv():
     # Use your existing database class

@@ -8,7 +8,7 @@ class Database:
         return pymysql.connect(host="localhost", user="root", password="root", database="crud_flask", charset='utf8mb4')
 
     def read(self, id):
-        con = Database.connect(self)
+        con = self.connect()
         cursor = con.cursor()
 
         try:
@@ -25,12 +25,9 @@ class Database:
             con.close()
 
     def insert(self, data):
-        con = Database.connect(self)
+        con = self.connect()
         cursor = con.cursor()
-
         try:
-            print(data['performance_score'])
-            print(type(data['performance_score']))
             cursor.execute("INSERT INTO employee(id,name,gender,salary,address, performance_score,remarks) VALUES( %s, %s, %s, %s, %s, %s, %s)",
                            (data['id'],data['name'], data['gender'], int(data['salary']),data['address'],float(data['performance_score']),data['remarks']))
             con.commit()
@@ -44,7 +41,7 @@ class Database:
             con.close()
 
     def update(self, id, data):
-        con = Database.connect(self)
+        con = self.connect()
         cursor = con.cursor()
 
         try:
@@ -61,11 +58,26 @@ class Database:
             con.close()
 
     def delete(self, id):
-        con = Database.connect(self)
+        con = self.connect()
         cursor = con.cursor()
 
         try:
             cursor.execute("DELETE FROM employee where id = %s", (id,))
+            con.commit()
+
+            return True
+        except:
+            con.rollback()
+
+            return False
+        finally:
+            con.close()
+        
+    def clear(self):
+        con = self.connect()
+        cursor = con.cursor()
+        try:
+            cursor.execute("DELETE FROM employee;")
             con.commit()
 
             return True
