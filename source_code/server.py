@@ -107,9 +107,9 @@ def upload_file():
         csv_file.save(file_path)
         success=upload_csv_to_database(file_path)
         if success:
-            return 'CSV data uploaded to database successfully', 200
+            return redirect(url_for('index')), flash('CSV uploaded successfully!')
         else:
-            return 'Failed to upload CSV data to database', 500
+            return redirect(url_for('index')), flash('CSV failed to Upload!')
     except Exception as e:
         return f"An error occured: {e}", 500
 
