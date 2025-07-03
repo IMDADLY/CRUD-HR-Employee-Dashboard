@@ -9,20 +9,18 @@ app.secret_key = "mys3cr3tk3y"
 db = Database()
 
 def upload_csv_to_database(file_path):
-    try:
-        with open(file_path, 'r') as csv_file:
-            csv_reader=csv.reader(csv_file)
-            field_names = ['id', 'name', 'gender', 'salary', 'address', 'performance_score', 'remarks', 'save']
-            db.clear()
-            for row in csv_reader:
-                 if len(row) == len(field_names) - 1:
-                    row.append('Save')
-                    form_data = ImmutableMultiDict(zip(field_names, row))
-                    db.insert(form_data)
-        return True
-    except Exception as e:
-        print(f"Error uploading CSV to database: {e}")
-        return False
+    with open(file_path, 'r') as csv_file:
+        csv_reader=csv.reader(csv_file)
+        field_names = ['id', 'name', 'gender', 'salary', 'address', 'performance_score', 'remarks', 'save']
+        db.clear()
+        for row in csv_reader:
+            if len(row) == len(field_names) - 1:
+                row.append('Save')
+                form_data = ImmutableMultiDict(zip(field_names, row))
+                success=db.insert(form_data)
+                if success==False:
+                    break
+    return success
     
 @app.route('/')
 def index():
@@ -100,8 +98,6 @@ def deletephone():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
-        if 'file' not in request.files:
-            return 'No file included in the request', 400
         csv_file = request.files['file']
         file_path = 'Downloads'
         csv_file.save(file_path)
@@ -109,9 +105,9 @@ def upload_file():
         if success:
             return redirect(url_for('index')), flash('CSV uploaded successfully!')
         else:
-            return redirect(url_for('index')), flash('CSV failed to Upload!')
+            return render_template('error.html')
     except Exception as e:
-        return f"An error occured: {e}", 500
+        return render_template('error.html')
 
 @app.route('/export')
 def export_csv():
