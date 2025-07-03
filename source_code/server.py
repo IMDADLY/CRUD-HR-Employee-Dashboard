@@ -126,7 +126,6 @@ def export_csv():
     # Write CSV to in-memory string
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(column_names)
     writer.writerows(data)
 
     output.seek(0)
