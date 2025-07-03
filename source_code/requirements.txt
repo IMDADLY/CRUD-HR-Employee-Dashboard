@@ -1,2 +1,6 @@
 flask
 pymysql
+csv
+pandas
+plotly
+werkzeug
