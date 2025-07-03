@@ -3,6 +3,7 @@ from module.database import Database
 from werkzeug.datastructures import ImmutableMultiDict
 import csv
 import io
+import plotly.express as px
 
 app = Flask(__name__)
 app.secret_key = "mys3cr3tk3y"
@@ -125,8 +126,15 @@ def export_csv():
                     headers={"Content-Disposition": "attachment;filename=employees.csv"})
 
 @app.route('/charts')
-def show_charts():
-    return render_template('charts.html')
+def charts():
+    data = db.read(None)
+    salary=[row[3] for row in data]
+    performance_score=[row[5] for row in data]
+    fig = px.scatter(x=performance_score, y=salary, labels={'x': 'Performance Score', 'y': 'Salary'}, title='Performance Score VS Salary').update_layout(xaxis_range=[5, None])
+
+    charts_html = fig.to_html(full_html=False)
+
+    return render_template("charts.html", charts_html=charts_html)
 
 @app.errorhandler(404)
 def page_not_found(error):
