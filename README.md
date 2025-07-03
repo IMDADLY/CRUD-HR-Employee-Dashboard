@@ -1,4 +1,4 @@
-# crud-application-using-flask-and-mysql
+# CRUD-HR-Employee-Dashboard using flask and mySQL
 A simple CRUD application using Flask and MySQL
 
 #### Built With
