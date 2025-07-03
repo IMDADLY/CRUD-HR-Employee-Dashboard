@@ -19,7 +19,6 @@ def upload_csv_to_database(file_path):
                 form_data = ImmutableMultiDict(zip(field_names, row))
                 success=db.insert(form_data)
                 if success==False:
-                    db.clear()
                     break
     return success
     
@@ -112,18 +111,11 @@ def upload_file():
 
 @app.route('/export')
 def export_csv():
-    # Use your existing database class
     data = db.read(None)
 
-    # Check if data is empty
     if not data:
-        return "No data to export"
+        return redirect(url_for('index')), flash('No data to export!')
 
-    # Manually set the column names (if not returned by your class)
-    # Or modify your class to return column names too
-    column_names = ['ID', 'Name', 'Gender', 'Salary','Address','Performance Score','Remarks']  # Update based on your table structure
-
-    # Write CSV to in-memory string
     output = io.StringIO()
     writer = csv.writer(output)
     writer.writerows(data)
