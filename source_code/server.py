@@ -19,6 +19,7 @@ def upload_csv_to_database(file_path):
                 form_data = ImmutableMultiDict(zip(field_names, row))
                 success=db.insert(form_data)
                 if success==False:
+                    db.clear()
                     break
     return success
     
@@ -105,7 +106,7 @@ def upload_file():
         if success:
             return redirect(url_for('index')), flash('CSV uploaded successfully!')
         else:
-            return render_template('error.html')
+            return redirect(url_for('index')), flash('CSV failed to upload to Database!')
     except Exception as e:
         return render_template('error.html')
 
