@@ -130,7 +130,7 @@ def charts():
     data = db.read(None)
     salary=[row[3] for row in data]
     performance_score=[row[5] for row in data]
-    fig = px.scatter(x=performance_score, y=salary, labels={'x': 'Performance Score', 'y': 'Salary'}, title='Performance Score VS Salary').update_layout(xaxis_range=[5, None])
+    fig = px.scatter(x=performance_score, y=salary, labels={'x': 'Performance Score', 'y': 'Salary'}, title='Performance Score VS Salary').update_layout(xaxis_range=[0, None])
 
     charts_html = fig.to_html(full_html=False)
 
