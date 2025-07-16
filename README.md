@@ -8,5 +8,6 @@ This web app is a CRUD application that will allow users to import data as csv a
 
 * Python
 * Python Libraries: flask, pymysql, plotly express
+* Bootstrap
 * MySQL
 * csv
